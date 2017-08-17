@@ -76,7 +76,11 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
+<<<<<<< HEAD
 	'username' => '',
+=======
+	'username' => 'root',
+>>>>>>> Reformed Item Clinic Monitoring
 	'password' => '',
 	'database' => 'inventory',
 	'dbdriver' => 'mysqli',

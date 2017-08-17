@@ -58,7 +58,11 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
+<<<<<<< HEAD
 $autoload['libraries'] = array('database', 'email', 'session', 'form_validation');
+=======
+$autoload['libraries'] = array('database','form_validation');
+>>>>>>> Reformed Item Clinic Monitoring
 
 /*
 | -------------------------------------------------------------------
@@ -79,7 +83,11 @@ $autoload['libraries'] = array('database', 'email', 'session', 'form_validation'
 |	$autoload['drivers'] = array('cache' => 'cch');
 |
 */
+<<<<<<< HEAD
 $autoload['drivers'] = array('cache');
+=======
+$autoload['drivers'] = array();
+>>>>>>> Reformed Item Clinic Monitoring
 
 /*
 | -------------------------------------------------------------------
@@ -89,7 +97,11 @@ $autoload['drivers'] = array('cache');
 |
 |	$autoload['helper'] = array('url', 'file');
 */
+<<<<<<< HEAD
 $autoload['helper'] = array('url', 'file');
+=======
+$autoload['helper'] = array('url','form');
+>>>>>>> Reformed Item Clinic Monitoring
 
 /*
 | -------------------------------------------------------------------

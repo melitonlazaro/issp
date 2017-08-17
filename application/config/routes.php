@@ -49,9 +49,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
+<<<<<<< HEAD
 $route['stockc/stockadd/(:any)'] = 'stock/stockadd/1';
 $route['stockc/itemedit/(:any)'] = 'stock/itemedit/1';
 $route['home/delete/(:any)'] = 'home/delete/$1';
+=======
+>>>>>>> Reformed Item Clinic Monitoring
 $route['default_controller'] = 'stockc';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
