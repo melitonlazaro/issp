@@ -68,36 +68,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <body>
 
 <div id="container">
-	<h1>Clinic Item Monitoring System</h1>
-<button><a href='<?php echo base_url();?>Main/view_add/'">ADD ITEM</a></button>
-		<table id="table" class="display" cellspacing="0" width="100%">
-		<thead>
-			 <th>Item Number</th>
-			 <th>Item Name</th>
-			 <th>Type of Item</th>
-			 <th>Quantity Delivered</th>
-			 <th>Date Delivered</th>
-			 <th>Comment</th>
-			 <th>Action</th>
-		 </thead>
-		 <?php 
-        if(isset($item)){
-            foreach ($item as $row){
-                echo "<th>".$row->item_no."</th>";
-                echo "<th>".$row->item_name."</th>";
-                echo "<th>".$row->item_type."</th>";
-                echo "<th>".$row->item_quantity."</th>";
-                echo "<th>".$row->item_quantity_date."</th>";
-                echo "<th>".$row->comment."</th>";
+<form action="add" method="POST">
 
-            echo "</tr>";
-        }
-        }else{
-            echo "no current record";
-        }
-        ?>
-		</table>
-	
+ <div class="form-group">
+ 	<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Item Name </label>
+ 		<div class="col-sm-9">
+			<input type="text" id="form-field-1" placeholder="Item Name" name="item_name" class="col-xs-10 col-sm-5" required/>
+ 		</div>
+ </div>
+
+ <div class="form-group">
+	 <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Item Type </label>
+		 <div class="col-sm-9">
+		 <input type="text" id="form-field-1" placeholder="Item Type" name="item_type" class="col-xs-10 col-sm-5" required/>
+		 </div>
+ </div>
+
+ <div class="form-group">
+ 	<label class="col-sm-3 control-label no-padding-right" for="form-field-2"> Item Quantity </label>
+ 		<div class="col-sm-9">
+ 			<input type="number" id="form-field-2" placeholder="Item Quantity" class="col-xs-10 col-sm-5" name="Item_Quantity" required/>
+ 		</div>
+ </div>
+
+ <div class="form-group">
+ 	<label class="col-sm-3 control-label no-padding-right" for="form-field-3"> Comment </label>
+ 		<div class="col-sm-9">
+ 			<input type="text" id="form-field-3" placeholder="Any Comments?" class="col-xs-10 col-sm-5" name="comment" required/>
+ 		</div>
+ </div>
+<button type="submit" name="submit" value="submit">EDIT</button>
 </div>
+<button><a href='<?php echo base_url();?>'">back</a></button>
 </body>
 </html>
