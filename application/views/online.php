@@ -25,17 +25,45 @@
 		<input type="text" name="contact_number" value="+63" required>
 		<br>
 		Procedure
-		<input type="text" name="procedure" required>
+		<select>
+			<option>Prenatal</option>
+			<option>Postnatal</option>
+			<option>Laboratory</option>
+		</select>
 		<br>
-	
-		<br>
-		Confirmation Code
-		<input type="text" name="confirmation_code_user">
 		<br>
 		<input type="submit" value="Schedule and Appointment">
-	<?php form_close(); ?>
+	</form>
  
-	<button name="send"> Send A Code through SMS </button>
 
+<br><br><br>
+<?php
+
+	if(isset($_POST["send"]))
+	{
+		include "smsGateway.php";
+		$smsGateway = new SmsGateway('melitonlazaro1@gmail.com', '09153864099');
+
+		$number = $_POST["number"];
+		$message = $_POST["message"];
+	
+		$number_code = mt_rand(10000, 99999);
+		$deviceID = 56400;
+		$number = '+639225824215';
+		$message = 'Your Number Code is: '.$number_code.'. Please input this to the Number Code Textbox.';
+
+		$result = $smsGateway->sendMessageToNumber($number, $message, $deviceID);	
+	}
+?>
+
+<br><br><br>
+	<form method="POST">
+		<input type="text" name="number">
+		<br>
+		<textarea cols="10" rows="10" name="message"></textarea>
+		<br>
+		<input type="submit" name="send" value="Send">
+
+	</form>
 </body>
 </html>

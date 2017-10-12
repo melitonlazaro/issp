@@ -1,6 +1,0 @@
-September 4, 2017
-- Login
-- logout
-- 50% online appointment
-- 100% profiling (plain UI)
-- 100% prenatal (plain UI)

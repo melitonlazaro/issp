@@ -1,4 +1,4 @@
-  <?php
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Main extends CI_Controller {
@@ -41,7 +41,7 @@ class Main extends CI_Controller {
            {  
                 //true  
                 $username = $this->input->post('username');  
-                $password = $this->input->post('password');  
+                $password = md5($this->input->post('password'));  
                 //model function  
                 $this->load->model('Main_model');  
                 if($this->Main_model->can_login($username, $password))  
@@ -50,7 +50,7 @@ class Main extends CI_Controller {
                           'username'     =>     $username  
                      );  
                      $this->session->set_userdata($session_data);  
-                     redirect('main/home');  
+                     redirect('Main/dashboard');  
                 }  
                 else  
                 {  
@@ -74,8 +74,16 @@ class Main extends CI_Controller {
 
     public function online_appointment()
     {
-        if(isset($_POST["send"]))
-        {
+        $data = array(
+                    'ol_appointment_id' => NULL,
+                    'patient_name'      => $this->input->post('name'),
+                    'patient_surname'   => $this->input->post('surname') ,
+                    'address'           => $this->input->post('address') ,
+                    'date'              => $this->input->post('date') ,
+                    'time'              => $this->input->post('time') ,
+                    'procedure'         => $this->input->post('procedure') ,
+                    'contact_number'    => $this->input->post('contact_number') 
+                    );
           include "smsGateway.php";
           $smsGateway = new SmsGateway('melitonlazaro1@gmail.com', '09153864099');
 
@@ -93,106 +101,32 @@ class Main extends CI_Controller {
             $confirmation_code = $this->input->post('confirmation_code_user');
             if($confirmation_code === $number_code)
             {
-               $data = array(
-                    'ol_appointment_id' => NULL,
-                    'patient_name'      => $this->input->post('name'),
-                    'patient_surname'   => $this->input->post('surname') ,
-                    'address'           => $this->input->post('address') ,
-                    'date'              => $this->input->post('date') ,
-                    'time'              => $this->input->post('time') ,
-                    'procedure'         => $this->input->post('procedure') ,
-                    'contact_number'    => $this->input->post('contact_number') 
-                    );
-
                $add_appointment = $this->Main_model->online_appointment($data);
             }
           }
-        }
     }
 
-    public function profiling()
+    public function send_confirmation_code($num)
     {
-      $this->load->view('profiling');
-    }
-    public function process_profiling()
-    {
-      $data = array(
-                    'patient_ID'  => NULL,
-                    'last_name'   => $this->input->post('surname'),
-                    'given_name'   => $this->input->post('given_name'),
-                    'middle_initial'   => $this->input->post('middle_initial'),
-                    'occupation'   => $this->input->post('occupation'),
-                    'date_of_birth'   => $this->input->post('date_of_birth'),
-                    'contact_num'   => $this->input->post('contact_num'),
-                    'street_no'   => $this->input->post('street_no'),
-                    'brgy'   => $this->input->post('barangay'),
-                    'city'   => $this->input->post('city'),
-                    'emergency_contact_name'   => $this->input->post('emergency_contact'),
-                    'emergency_contact_num'   => $this->input->post('emergency_num'),
-                    'emergency_contact_address'   => $this->input->post('emergency_contact_address'),
-                   );
+      $this->load->view('home', $num); 
 
-      $profiling = $this->Main_model->profiling($data);
     }
 
-    public function start_prenatal()
+    public function dashboard()
     {
-      $this->load->view('physical_examination');
+      $this->load->model('Main_model');
+      $data['latest_patients'] = $this->Main_model->count_latest_patients();
+      $data['latest_infants'] = $this->Main_model->count_latest_infants();
+      $data['active_cases'] = $this->Main_model->count_active_cases();
+      $data['first_names'] = $this->Main_model->get_first_names();
+      $data['last_names'] = $this->Main_model->get_last_names();
+      $data['physician_id'] = $this->Main_model->get_physician_id();
+      $this->load->view('dashboard', $data);
     }
 
-    public function prenatal()
+    public function chart()
     {
-      $data = array(
-                    'Num' => NULL,
-                    'Patient_ID' => $this->input->post('patient_id'),
-                    'height' => $this->input->post('height'),
-                    'weight' => $this->input->post('weight'),
-                    'blood_pressure' => $this->input->post('blood_pressure'),
-                    'blood_type' => $this->input->post('blood_type'),
-                    'conjunctiva_pale' => $this->input->post('pale'),
-                    'conjunctiva_yellowish' => $this->input->post('yellowish'),
-                    'neck_enlarged_thyroid' => $this->input->post('enlargedthyroid'),
-                    'neck_enlarged_lymph_nodes' => $this->input->post('enlargedlympnodes'),
-                    'breast_mass' => $this->input->post('mass'),
-                    'breast_nipple_discharge' => $this->input->post('nippledischarged'),
-                    'breast_dimpling' => $this->input->post('skinorangepeel'),
-                    'breast_enlarged_axillary_lymph_nodes' => $this->input->post('enlargedaxilarylympnodes'),
-                    'thorax_abnormal_cardiac_rate' => $this->input->post('abnormalheartsound'),
-                    'thorax_abnormal_respiratory_rate' => $this->input->post('abnormalbreathsounds'),
-                    'abdomen_pe_fundic_height' => $this->input->post('abdomenheight'),
-                    'abdomen_pe_fetal_movement' => $this->input->post('fetalmovement'),
-                    'abdomen_pe_fetal_heart_tone' => $this->input->post('fetalhearttone'),
-                    'lm_presenting_part' => $this->input->post('presentingpart'),
-                    'lm_position_of_fetal_back' => $this->input->post('positionfetalback'),
-                    'lm_uterine_activity' => $this->input->post('urineactivity'),
-                    'lm_fetal_parts' => $this->input->post('fetalparts'),
-                    'lm_presenting_part_status' => $this->input->post('statuspresenntingpart'),
-                    'perineum_scars' => $this->input->post('scars'),
-                    'perineum_warts_or_mass' => $this->input->post('wartsmass'),
-                    'perineum_laceration' => $this->input->post('laceration'),
-                    'perineum_severe_varicosities' => $this->input->post('severevaricosities'),
-                    'vagina_bartholins_cyst' => $this->input->post('bartholinscyst'),
-                    'vagina_warts_gland_discharge' => $this->input->post('wartsskenesgland'),
-                    'vagina_cystocele_or_rectocoele' => $this->input->post('crystocoele'),
-                    'vagina_purulant_discharge' => $this->input->post('purulentdischarged'),
-                    'vagina_erosion_or_foreign_body' => $this->input->post('eroslon'),
-                    'cervix_consistency' => $this->input->post('consistency'),
-                    'cervix_dilatation' => $this->input->post('dilation'),
-                    'cervix_palpable_presenting_part' => $this->input->post('palpablepresentingpart'),
-                    'cervix_status_BagOfwater' => $this->input->post('statusofbagofwater'),
-                    'impression' => $this->input->post('impression'),
-                    'plans' => $this->input->post('plans'),
-                   );
-        $prenatal_result = $this->Main_model->prenatal($data);
-        if($prenatal_result)
-        {
-          $this->index();
-        }
-        else
-        {
-          $error = $this->db->error();
-        
-        }
+      $this->load->view('chart');
     }
 
 }

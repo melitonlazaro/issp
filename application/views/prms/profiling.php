@@ -3,8 +3,7 @@
 	<title></title>
 </head>
 <body>
-
-	<?php echo form_open('Main/process_profiling'); ?>
+	<?php echo form_open('Prms/process_profiling'); ?>
 		<input type="text" name="surname" placeholder="Surname"><br>
 		<input type="text" name="given_name" placeholder="Given Name"><br>
 		<input type="text" name="middle_initial" placeholder="Middle Initial"><br>

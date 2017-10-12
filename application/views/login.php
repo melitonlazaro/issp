@@ -1,52 +1,44 @@
 <html>
 <head>
-	<title>Maternity Clinic Management System</title>
+<title>MCMS</title>
+<link rel="shortcut icon" type="image/png" href="<?php echo base_url();?>/Public/images/Icon.png"/>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/Public/style.css"></link>
+
 </head>
 <body>
 
-	<form action="Main/login" method="POST">
-		<input type="text" name="username" placeholder="Username"><br>
-		<input type="password" name="password" placeholder="Password">
-		<input type="submit" value="login">
+<div class="container">
 
 
-	</form>
+	<div class="admin">
+
+		<div class="admin-1">
+      		<span style="font-size: 40px;  background-color: #fff; padding: 10px 10px;">
+        		<font color="teal">Admin</font>
+      		</span>
+    	</div>
+
+    </div>
+
+		<?php echo form_open('Main/login'); ?>
+		
+    	<?php if($this->session->flashdata('error'))
+    	{
+			echo $this->session->flashdata('error');     	
+	  	} 
+    	?>
+			<div class="form-input">
+				<input type="text" name="username" placeholder="Enter Admin Username" autofocus>
+			</div>
+			<div class="form-input">
+				<input type="password" name="password" placeholder="Enter Password">
+			</div>
+				<input type="submit" name="submit"
+				value="login" class="btn-l teal-l"> <br>
+		</form> <br>
+			<a href="url">New Admin?</a>
+</div>
 
 
-	<br><br><br>
-	<form action="Main/logout" method="POST">
-		<input type="submit" value="Logout">
-
-	</form>
-
-
-<?php
-
-	if(isset($_POST["send"]))
-	{
-		include "smsGateway.php";
-		$smsGateway = new SmsGateway('melitonlazaro1@gmail.com', '09153864099');
-
-		$number = $_POST["number"];
-		$message = $_POST["message"];
-	
-		$number_code = mt_rand(10000, 99999);
-		$deviceID = 56400;
-		$number = '+639758769951';
-		$message = $number_code;
-
-		$result = $smsGateway->sendMessageToNumber($number, $message, $deviceID);	
-	}
-?>
-
-<br><br><br>
-	<form method="POST">
-		<input type="text" name="number">
-		<br>
-		<textarea cols="10" rows="10" name="message"></textarea>
-		<br>
-		<input type="submit" name="send" value="Send">
-
-	</form>
 </body>
 </html>
