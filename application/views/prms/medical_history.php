@@ -5,6 +5,10 @@
 
 </head>
 <body>
+      <?php require('sidenav.php'); ?>
+      <br><br><br>
+
+      <H1>Medical History</H1>
 <?php 
     if($this->session->flashdata('success'))
     {
@@ -235,14 +239,8 @@
             </select> 
     </div>
 </div>
-<div class="row">
-    <div class="col-md-6">
         <button type="submit" class="btn btn-success"> Submit and proceed to Physical Examination</button> 
-    </div>
-    <div class="col-md-6">
-        <button type="submit" class="btn btn-danger"> Reset <button>
-    </div>
-</div>
+
 
 </form>
 

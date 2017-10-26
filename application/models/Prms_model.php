@@ -43,6 +43,14 @@ class Prms_model extends CI_Model {
     return $result->row();
   }
 
+  public function get_patient_names()
+  {
+    $this->db->select('patient_ID, last_name, given_name, middle_initial');
+    $this->db->from('patient_info');
+    $query = $this->db->get();
+    return $query->result();
+  }
+
   public function get_patient_id($last_name, $first_name)
   {
     $this->db->select('patient_ID');
@@ -83,7 +91,7 @@ class Prms_model extends CI_Model {
   $this->db->limit($limit, $start);
   $query = $this->db->get();
   $output .= '
-  <div class="container">
+  <div class="container-fluid">
   <table class="table table-bordered">
    <tr>
     <th>Case ID</th>
@@ -92,7 +100,6 @@ class Prms_model extends CI_Model {
     <th>Given Name</th>
     <th>Physician ID</th>
     <th>Date Start</th>
-
     <th>Status</th>
     <th>Action</th>
    </tr>
@@ -109,15 +116,142 @@ class Prms_model extends CI_Model {
     <td>'.$row->date_start.'</td>
     <td>'.$row->status.'</td> 
     <td>
-      <button class="btn btn-success">Prenatal</button> 
+      <a href="../prms/case_timeline/'.$row->case_id.'"><button class="btn btn-info">View</button></a>
+      <a href="../prms/prenatal/'.$row->patient_id.'/'.$row->case_id.'"><button class="btn btn-success">Prenatal</button></a>
       <button class="btn btn-success">Childbirth</button> 
-      <button class="btn btn-danger">Drop Case</button> 
+      <a href="../prms/drop_case/'.$row->case_id.'"><button class="btn btn-danger">Drop Case</button></a>
     </td>     
    </tr>
    ';
   }
   $output .= '</table></div>';
   return $output;
+ }
+
+ public function count_all_patient()
+ {
+  $query = $this->db->get("patient_info");
+  return $query->num_rows();
+ }
+
+ public function fetch_patient_details($limit, $start)
+ {
+  $output = '';
+  $this->db->select("*");
+  $this->db->from("patient_info");
+  $this->db->order_by("patient_ID", "ASC");
+  $this->db->limit($limit, $start);
+  $query = $this->db->get();
+  $output .= '
+  <div class="container-fluid">
+  <table class="table table-bordered">
+   <tr>
+    <th>Patient ID</th>
+    <th>Patient Name</th>
+    <th>Date of Birth</th>
+    <th>Contact Number</th>
+    <th>Date Registered</th>
+    <th> Action</th>
+   </tr>
+  ';
+  foreach($query->result() as $row)
+  {
+   $output .= '
+   <tr>
+    <td>'.$row->patient_ID.'</td>
+    <td>'.$row->last_name.' , '.$row->given_name.' '.$row->middle_initial.'</td>
+    <td>'.$row->date_of_birth.'</td>
+    <td>'.$row->contact_num.'</td>
+    <td>'.$row->date_registered.'</td>
+    <td>
+      <a href="../prms/patient_timeline/'.$row->patient_ID.'"><button type="submit" class="btn btn-info" name="update">View Profile</button></a></button> 
+    </td>     
+   </tr>
+   ';
+  }
+  $output .= '</table></div>';
+  return $output;
+ }
+
+ public function get_patient_cases($patient_ID)
+ {
+  $this->db->select('*');
+  $this->db->from('case');
+  $this->db->where('patient_id', $patient_ID);
+  $query = $this->db->get();
+  return $query->result();
+ }
+
+ public function get_medical_history($patient_ID)
+ {
+  $this->db->select('*');
+  $this->db->from('medicalhistory');
+  $this->db->where('patient_ID', $patient_ID);
+  $query = $this->db->get();
+  return $query->result();
+ }
+
+ public function get_physical_examination($patient_ID)
+ {
+  $this->db->select('*');
+  $this->db->from('physicalexamination');
+  $this->db->where('patient_ID', $patient_ID);
+  $query = $this->db->get();
+  return $query->result();
+ }
+ 
+ public function drop_case($case_id)
+ {
+  $this->db->where('case_id', $case_id);
+  $result = $this->db->delete('case');
+  return $result;
+ }
+
+ public function get_prenatal_case_timeline($case_id)
+ {
+  $this->db->select('*');
+  $this->db->from('physicalexamination');
+  $this->db->where('case_id', $case_id);
+  $this->db->order_by('Num DESC');
+  $query = $this->db->get();
+  return $query->result();
+ }
+
+ public function get_case_details($case_id)
+ {
+  $this->db->select('*');
+  $this->db->from('case');
+  $this->db->where('case_id', $case_id);
+  $this->db->join('patient_info', 'patient_info.patient_ID = case.patient_ID');
+  $query = $this->db->get();
+  return $query->result();
+ }
+
+ public function get_medical_history_case_timeline($case_id)
+ {
+  $this->db->select('Num, Patient_ID, case_id, Date, oh_last_delivery_date, oh_age_of_gestation_weeks, oh_expected_date_of_confinement,');
+  $this->db->from('medicalhistory');
+  $this->db->where('case_id', $case_id);
+  $query = $this->db->get();
+  return $query->result();
+ }
+
+ public function get_pe_result($Num)
+ {
+  $this->db->select('*');
+  $this->db->from('physicalexamination');
+  $this->db->where('Num', $Num);
+  $query = $this->db->get();
+  return $query->result();
+ }
+
+ public function get_mh_result($Num)
+ {
+  $this->db->select('*');
+  $this->db->from('medicalhistory');
+  $this->db->where('Num', $Num);
+  $query = $this->db->get();
+  return $query->result();
  }
 
 }

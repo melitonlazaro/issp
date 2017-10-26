@@ -14,7 +14,7 @@
 
 		<div class="admin-1">
       		<span style="font-size: 40px;  background-color: #fff; padding: 10px 10px;">
-        		<font color="teal">Admin</font>
+        		<font color="teal">MCMS</font>
       		</span>
     	</div>
 
@@ -36,7 +36,6 @@
 				<input type="submit" name="submit"
 				value="login" class="btn-l teal-l"> <br>
 		</form> <br>
-			<a href="url">New Admin?</a>
 </div>
 
 

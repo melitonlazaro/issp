@@ -24,7 +24,14 @@ class Main extends CI_Controller {
 	 */
 	public function index()
 	{
+    if($this->session->userdata('username'))
+    {
+      $this->dashboard();
+    }
+    else
+    {
 		$this->load->view('login');
+    }
 	}
 
 	public function home()
@@ -115,18 +122,14 @@ class Main extends CI_Controller {
     public function dashboard()
     {
       $this->load->model('Main_model');
+      $this->load->model('Item_model');
+      $data['patient_count'] = $this->Main_model->count_patient();
+      $data['total_case'] = $this->Main_model->count_case();
       $data['latest_patients'] = $this->Main_model->count_latest_patients();
       $data['latest_infants'] = $this->Main_model->count_latest_infants();
       $data['active_cases'] = $this->Main_model->count_active_cases();
-      $data['first_names'] = $this->Main_model->get_first_names();
-      $data['last_names'] = $this->Main_model->get_last_names();
-      $data['physician_id'] = $this->Main_model->get_physician_id();
+      $data['less_ten'] = $this->Item_model->less_than_ten();
       $this->load->view('dashboard', $data);
-    }
-
-    public function chart()
-    {
-      $this->load->view('chart');
     }
 
 }

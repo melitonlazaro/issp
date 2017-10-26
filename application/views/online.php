@@ -1,40 +1,45 @@
 <html>
 <head>
 	<title>Online Appointment</title>
+	<?php require ('extensions.php'); ?>
 </head>
 <body>
 	
-
-	<?php echo form_open('Main/online_appointment'); ?>
-		name
-		<input type="text" name="name" required>
-		<br>
-		surname
-		<input type="text" name="surname" required>
-		<br>
-		address
-		<input type="text" name="address" required>
-		<br>
-		date
-		<input type="date" name="date" required>
-		<br>
-		time
-		<input type="text" name="time" required>
-		<br>
-		Contact Number
-		<input type="text" name="contact_number" value="+63" required>
-		<br>
-		Procedure
-		<select>
-			<option>Prenatal</option>
-			<option>Postnatal</option>
-			<option>Laboratory</option>
-		</select>
-		<br>
-		<br>
-		<input type="submit" value="Schedule and Appointment">
-	</form>
- 
+	<div class="contaienr-fluid">	
+		<div class="row">
+			<div class="col-md-4">
+				<?php echo form_open('Main/online_appointment'); ?>
+					<label>First Name</label>
+					<input type="text" name="name" class="form-control" required>
+					<br>
+					<label>Last Name</label>
+					<input type="text" name="surname" class="form-control" required>
+					<br>
+					<label>Address</label>
+					<input type="text" name="address" class="form-control" required>
+					<br>
+					<label>Date</label>
+					<input type="date" name="date" class="form-control" min="<?php echo date('Y-m-d');?>" required>
+					<br>
+					time
+					<input type="text" name="time" class="form-control" required>
+					<br>
+					Contact Number
+					<input type="text" name="contact_number" value="+63" class="form-control" required>
+					<br>
+					Procedure
+					<select class="form-control" name="">
+						<option>Prenatal</option>
+						<option>Postnatal</option>
+						<option>Laboratory</option>
+					</select>
+					<br>
+					<br>
+					<button type="submit" class="btn btn-success" name="send" value="Send">Submit</button>
+				</form>
+			</div>
+		</div>
+ 	</div>
 
 <br><br><br>
 <?php
@@ -56,14 +61,5 @@
 	}
 ?>
 
-<br><br><br>
-	<form method="POST">
-		<input type="text" name="number">
-		<br>
-		<textarea cols="10" rows="10" name="message"></textarea>
-		<br>
-		<input type="submit" name="send" value="Send">
-
-	</form>
 </body>
 </html>

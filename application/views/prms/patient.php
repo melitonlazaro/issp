@@ -24,7 +24,7 @@
 
 <div class="header">
     <span onclick="openNav()"><i class="fa fa-bars manage" aria-hidden="true"></i></span> PATIENT
-    <a class="log"><i class="fa fa-sign-out" aria-hidden="true"></i> LOGOUT</a>
+
 </div>
 
 <section id="main-content">
@@ -37,7 +37,7 @@
  
 </div><br>
 
-<div id="Profiling" class="tabcontent">
+<div id="Profiling" >
     <i class="fa fa-user"></i> Patient Profile<br>
     <table class="pro">
   <tr>
@@ -65,12 +65,9 @@
     <th><input type="text" class="ans-p" name="emergency_contact_address" placeholder="Emergency Contact Address"></th>
   </tr>
     </table>
-    <p>Select Physician</p>
-    <select name="physician">
-      <option>1</option>
-    </select>
+
     <table class="pro">
-    <tr><th><input class="btn btn-success" type="submit" value="Submit and proceed to Medical History"></th></tr>
+    <tr><th><input class="btn-l teal-l" type="submit" value="Submit and proceed to Medical History"></th></tr>
     </table>
 
   </form>

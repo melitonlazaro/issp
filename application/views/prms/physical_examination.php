@@ -3,11 +3,11 @@
 <?php require('extensions.php'); ?>
 </head>
 <body>
+  <?php require('sidenav.php'); ?>
+  <br><br><br>
+      <H1>Physical Examination</H1>
 
 <?php echo form_open('Prms/physical_examination'); ?>
-<?php echo $patient_ID;
-        echo $last_case_id;
- ?>
 
 <div class="container">
     <input type="hidden" name="patient_id" value="<?php echo $patient_ID;?>">

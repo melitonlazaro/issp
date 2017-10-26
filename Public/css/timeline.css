@@ -96,7 +96,7 @@ div.drpnav {
     height: 100px;
     width: 240px;
     margin-top: -60px;
-    background-image: url(images/Menu.png);
+    background-image: url(/Public/images/menu.png) !important; 
     background-size: 60px 58px;
     background-position: center;
     background-repeat: no-repeat;

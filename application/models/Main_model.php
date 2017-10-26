@@ -63,4 +63,18 @@ class Main_model extends CI_Model {
     $query = $this->db->query("SELECT `physician_id` FROM physician ");
     return $query->result();
   }
+
+  public function count_patient()
+  {
+    $query = $this->db->query("SELECT * FROM patient_info");
+    return $query->num_rows();
+  }
+
+  public function count_case()
+  {
+    $this->db->select('*');
+    $this->db->from('case');
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
 }

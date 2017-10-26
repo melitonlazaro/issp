@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Prms extends CI_Controller {
 		public function __construct() {
 				parent::__construct();
-				
 
 					}
 	/**
@@ -22,19 +21,12 @@ class Prms extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function index()
-	{
-    $this->load->model('Prms_model');
-		$data["patient_info"] = $this->Prms_model->get_patient_records();
-    $this->load->view('prms/home', $data);
-	}
+
 
   public function create_case_existing()
   {
     $this->load->model('Prms_model');
-    $last_name = $this->input->post('last_name');
-    $first_name = $this->input->post('given_name');
-    $patient_ID = $this->Prms_model->get_patient_id($last_name, $first_name);
+    $patient_ID = $this->input->post('patient_id');
     $physician = $this->input->post('physician_id');
     $last_case_id = $this->Prms_model->create_new_case($patient_ID, $physician);
     if($last_case_id)
@@ -78,7 +70,7 @@ class Prms extends CI_Controller {
                  );
 
     $profiling = $this->Prms_model->profiling($data);
-    $physician = $this->input->post('physician');
+    $physician = 1;
     $patient_ID = $profiling;
     $last_case_id = $this->Prms_model->create_new_case($patient_ID, $physician);
     $data['patient_ID'] = $patient_ID;
@@ -210,26 +202,21 @@ class Prms extends CI_Controller {
         }
   }
 
-  public function Patient_profile($patient_ID)
-  {
-    $this->load->model('Prms_model');
-    $data["profile"] = $this->Prms_model->get_patient_profile($patient_ID);
-    $this->load->view('Prms/patient_profile', $data);
-  }
-
   public function case_list()
   {
     $this->load->model('Prms_model');
-    $this->load->view('prms/cases');
+    $data['patient_names'] = $this->Prms_model->get_patient_names();
+    $data['physician_id'] = $this->Main_model->get_physician_id();
+    $this->load->view('prms/cases', $data);
   }
-  function pagination()
+  public function pagination()
  {
   $this->load->model("Prms_model");
   $this->load->library("pagination");
   $config = array();
   $config["base_url"] = "#";
   $config["total_rows"] = $this->Prms_model->count_all();
-  $config["per_page"] = 2;
+  $config["per_page"] = 5;
   $config["uri_segment"] = 3;
   $config["use_page_numbers"] = TRUE;
   $config["full_tag_open"] = '<ul class="pagination">';
@@ -260,4 +247,105 @@ class Prms extends CI_Controller {
   echo json_encode($output);
  }
 
+   public function pagination_patient_list()
+ {
+    $this->load->model("Prms_model");
+    $this->load->library("pagination");
+    $config = array();
+    $config["base_url"] = "#";
+    $config["total_rows"] = $this->Prms_model->count_all_patient();
+    $config["per_page"] = 5;
+    $config["uri_segment"] = 3;
+    $config["use_page_numbers"] = TRUE;
+    $config["full_tag_open"] = '<ul class="pagination">';
+    $config["full_tag_close"] = '</ul>';
+    $config["first_tag_open"] = '<li>';
+    $config["first_tag_close"] = '</li>';
+    $config["last_tag_open"] = '<li>';
+    $config["last_tag_close"] = '</li>';
+    $config['next_link'] = '&gt;';
+    $config["next_tag_open"] = '<li>';
+    $config["next_tag_close"] = '</li>';
+    $config["prev_link"] = "&lt;";
+    $config["prev_tag_open"] = "<li>";
+    $config["prev_tag_close"] = "</li>";
+    $config["cur_tag_open"] = "<li class='active'><a href='#'>";
+    $config["cur_tag_close"] = "</a></li>";
+    $config["num_tag_open"] = "<li>";
+    $config["num_tag_close"] = "</li>";
+    $config["num_links"] = 1;
+    $this->pagination->initialize($config);
+    $page = $this->uri->segment(3);
+    $start = ($page - 1) * $config["per_page"];
+
+    $output = array(
+     'pagination_link'  => $this->pagination->create_links(),
+     'country_table'   => $this->Prms_model->fetch_patient_details($config["per_page"], $start)
+    );
+    echo json_encode($output);
+   }
+
+    public function patient_list()
+    {
+      $this->load->view('prms/patient_list');
+    }
+
+    public function patient_profile($patient_ID)
+    {
+      $this->load->model('Prms_model');
+      $data['patient_information'] = $this->Prms_model->get_patient_profile($patient_ID);
+      $data['cases'] = $this->Prms_model->get_patient_cases($patient_ID);
+      $data['medicalhistory'] = $this->Prms_model->get_medical_history($patient_ID);
+      $data['physicalexam'] = $this->Prms_model->get_physical_examination($patient_ID);
+      $this->load->view('prms/timeline', $data);
+    }
+
+    public function patient_timeline($patient_ID)
+    {
+      $this->load->model('Prms_model');
+      $data['patient_information'] = $this->Prms_model->get_patient_profile($patient_ID);
+      $data['cases'] = $this->Prms_model->get_patient_cases($patient_ID);
+      $this->load->view('prms/patient_profile', $data);
+    }
+
+    public function prenatal($patient_id, $case_id)
+    {
+      $data['patient_ID'] = $patient_id;
+      $data['last_case_id']  = $case_id;
+      $this->load->view('prms/physical_examination', $data);
+    }
+
+    public function drop_case($case_id)
+    {
+      $this->load->model('Prms_model');
+      $result = $this->Prms_model->drop_case($case_id);
+      if($result)
+      {
+        $this->session->set_flashdata('delete', 'Case successfully deleted. ');
+        $this->load->view('prms/cases');
+      }
+    }
+
+    public function case_timeline($case_id)
+    {
+      $this->load->model('Prms_model');
+      $data['prenatal'] = $this->Prms_model->get_prenatal_case_timeline($case_id);
+      $data['medicalhistory'] = $this->Prms_model->get_medical_history_case_timeline($case_id);
+      $data['case_details'] = $this->Prms_model->get_case_details($case_id);
+      $this->load->view('prms/case_timeline', $data);
+    }
+
+    public function pe_result($Num)
+    {
+      $this->load->model('Prms_model');
+      $data['prenatal'] = $this->Prms_model->get_pe_result($Num);
+      $this->load->view('prms/Physical_examination_result', $data);
+    }
+
+    public function medicalhistory_result($Num)
+    {
+      $this->load->model('Prms_model');
+      $data['mh_result'] = $this->Prms_model->get_mh_result($Num);
+      $this->load->view('prms/medical_history_result', $data);
+    }
 }
