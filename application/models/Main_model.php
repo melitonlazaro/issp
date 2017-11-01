@@ -77,4 +77,13 @@ class Main_model extends CI_Model {
     $query = $this->db->get();
     return $query->num_rows();
   }
+
+  public function get_tasks()
+  {
+    $this->db->select('*');
+    $this->db->from('tasks');
+    $query = $this->db->get();
+    return $query->result();
+  }
+
 }

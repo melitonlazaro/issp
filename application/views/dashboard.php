@@ -35,6 +35,7 @@
 <html>
 <head>
  <?php require "extensions.php"; ?>
+  <link rel="stylesheet" href="<?php echo base_url();?>/Public/css/dataTables.bootstrap.min.css">
 
 </head>
 <style type="text/css">
@@ -300,8 +301,58 @@
         </div>
       </div>
     </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4><i class="fa fa-clipboard"></i>To Do list</h4>
+            </div>
+            <div class="panel panel-body">
+              <div id="todo">
+                <button class="btn btn-info btn-sm" id="addtodo">Add</button>
+                <table id="todolist" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <td>Task</td>
+                        <td>Created by</td>
+                        <td>Date </td>
+                        <td>Time </td>
+                      </tr>
+                    </thead>
+                      <?php foreach($tasks as $ts)
+                          {
+                            echo '
+                                  <tr>
+                                    <td>'.$ts->task_content.'</td>
+                                    <td>'.$ts->task_creator.'</td>
+                                    <td>'.$ts->date.'</td>
+                                    <td>'.$ts->time.'</td>
+                                  </tr>
+                                 ';
+                          }
+                      ?>
+                </table>
+              </div>
+              <div id="todoform">
+                <button class="btn btn-info btn-sm" id="todoformbutton"><i class="fa fa-arrow-left"></i></button>
+                <br><br>
+                <form>
+                  <input type="text" class="form-control" placeholder="Task"> 
+                </form>
+                <br><br><br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 </body>
 </html> 
+<script src="<?php echo base_url();?>public/js/jquery.dataTables.min.js"></script>
+<script src="<?php echo base_url();?>public/js/dataTables.bootstrap.min.js"></script>
 <script>
 Morris.Bar({
  element : 'chart',
@@ -322,5 +373,34 @@ Morris.Line({
  labels:['Case'],
  hideHover:'auto',
  stacked:true
+});
+</script>
+<script>
+  $(function(){
+    $('#todolist').DataTable({
+      'paging' : true,
+      'searching' : false,
+      'info'    : false,
+      'ordering'  : false,
+      'autoWidth'  : false,
+      'lengthChange' : false,
+    })
+  })
+</script>
+<script>
+    $(document).ready(function(){
+        $('#todoform').hide();
+});
+</script>
+<script>
+$(document).ready(function() {
+  $('#addtodo').click(function(){
+    $('#todo').hide(100);
+    $('#todoform').show(100);
+    });
+  $('#todoformbutton').click(function(){
+    $('#todo').show(100);
+    $('#todoform').hide(100);
+  });
 });
 </script>

@@ -348,4 +348,11 @@ class Prms extends CI_Controller {
       $data['mh_result'] = $this->Prms_model->get_mh_result($Num);
       $this->load->view('prms/medical_history_result', $data);
     }
+
+    public function datatable_example()
+    {
+      $this->load->model('Prms_model');
+      $data['dt_ex'] = $this->Prms_model->dt_ex();
+      $this->load->view('prms/datatables', $data);
+    }
 }
