@@ -30,14 +30,38 @@ class Main extends CI_Controller {
     }
     else
     {
-		$this->load->view('login');
+		$this->load->view('index');
     }
 	}
+
+  public function employee_login()
+  {
+    $this->load->view('login');
+  }
 
 	public function home()
 	{
 		$this->load->view('online');
 	}
+
+  public function contact_us()
+  {
+    $this->load->view('contact');
+  }
+
+  public function feedback()
+  {
+    $data = array(
+                'feedback_id' => NULL,
+                'first_name' => $this->input->post('first_name'),
+                'last_name' => $this->input->post('last_name'),
+                'email' => $this->input->post('email'),
+                'phone' => $this->input->post('phone'),
+                'company' => $this->input->post('company'),
+                'message' => $this->input->post('message'),
+               );
+    $this->Main_model->feedback($data);
+  }
 
 	public function login()
 	{
@@ -133,5 +157,16 @@ class Main extends CI_Controller {
       $this->load->view('dashboard', $data);
     }
 
+    public function add_task()
+    {
+      $data = array(
+                    'task_id' => NULL,
+                    'task_content' => $this->input->post('task_name'),
+                    'task_creator' => $this->session->userdata('username'),
+                    'date' => date('Y-m-d'),
+                    'time' => date('H:i')
+                   );
+      $result = $this->Main_model->add_task($data); 
+    }
 }
 ?>

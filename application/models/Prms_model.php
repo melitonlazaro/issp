@@ -83,49 +83,13 @@ class Prms_model extends CI_Model {
 
  public function fetch_details($limit, $start)
  {
-  $output = '';
   $this->db->select("*");
   $this->db->from("case");
   $this->db->order_by("case_id", "ASC");
   $this->db->join('patient_info', 'patient_info.patient_ID = case.patient_ID');
   $this->db->limit($limit, $start);
   $query = $this->db->get();
-  $output .= '
-  <div class="container-fluid">
-  <table class="table table-bordered">
-   <tr>
-    <th>Case ID</th>
-    <th>Patient ID</th>
-    <th>Last Name</th>
-    <th>Given Name</th>
-    <th>Physician ID</th>
-    <th>Date Start</th>
-    <th>Status</th>
-    <th>Action</th>
-   </tr>
-  ';
-  foreach($query->result() as $row)
-  {
-   $output .= '
-   <tr>
-    <td>'.$row->case_id.'</td>
-    <td>'.$row->patient_id.'</td>
-    <td>'.$row->last_name.'</td>
-    <td>'.$row->last_name.'</td>
-    <td>'.$row->physician_id.'</td>
-    <td>'.$row->date_start.'</td>
-    <td>'.$row->status.'</td> 
-    <td>
-      <a href="../prms/case_timeline/'.$row->case_id.'"><button class="btn btn-info">View</button></a>
-      <a href="../prms/prenatal/'.$row->patient_id.'/'.$row->case_id.'"><button class="btn btn-success">Prenatal</button></a>
-      <button class="btn btn-success">Childbirth</button> 
-      <a href="../prms/drop_case/'.$row->case_id.'"><button class="btn btn-danger">Drop Case</button></a>
-    </td>     
-   </tr>
-   ';
-  }
-  $output .= '</table></div>';
-  return $output;
+  return $query;
  }
 
  public function count_all_patient()
@@ -255,6 +219,32 @@ class Prms_model extends CI_Model {
  }
 
  public function dt_ex()
+ {
+  $this->db->select('*');
+  $this->db->from('patient_info');
+  $query = $this->db->get();
+  return $query->result();
+ }
+
+ public function get_case_list()
+ {
+  $this->db->select('*');
+  $this->db->from('case');
+  $this->db->join('patient_info', 'patient_info.patient_ID = case.patient_ID');
+  $this->db->join('physician', 'physician.physician_id = case.physician_id');
+  $query = $this->db->get();
+  $case_result = $query->result();
+  return $case_result;
+ }
+ public function patient_list()
+ {
+  $this->db->select('*');
+  $this->db->from('patient_info');
+  $query = $this->db->get();
+  return $query->result();
+ }
+
+public function dt_re()
  {
   $this->db->select('*');
   $this->db->from('patient_info');

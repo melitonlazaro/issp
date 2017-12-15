@@ -1,6 +1,8 @@
 <html>
 <head>
-<?php require("extensions.php"); ?>
+<?php require('extensions.php'); ?>
+  <link rel="stylesheet" href="<?php echo base_url();?>/Public/css/dataTables.bootstrap.min.css">
+
 </head>
 <style type="text/css">
 .page-header
@@ -14,15 +16,6 @@
   <?php require('sidenav.php'); ?>
   <br><br><br>
 
-  <?php if($this->session->flashdata('delete'))
-  {
-    echo '
-      <div class="alert alert-info">
-      '.$this->session->flashdata('delete').'
-      </div>
-    ';
-  }
-   ?>
   <div class="container-fluid">
     <h1 class="page-header">Case List</h1>
       <div class="pull-right">
@@ -96,37 +89,70 @@
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Add New Case</button>
               
     <br><br>
-
-  <div align="right" id="pagination_link"></div>
-  <div class="table-responsive" id="country_table"></div>
+    <div class="container-fluid">
+        <table class="table table-bordered" id="case_list">
+         <tr>
+          <th>Case ID</th>
+          <th>Patient ID</th>
+          <th>Patient Name</th>
+          <th>Physician ID</th>
+          <th>Physician Name</th>
+          <th>Date Start</th>
+          <th>Status</th>
+          <th>Action</th>
+         </tr>
+        <?php 
+        $start_date = date('Y-m-01');
+        $end_date = date('Y-m-31');
+        foreach($case_details as $row)
+        { echo '
+         <tr>
+          <td>'.$row->case_id.'</td>
+          <td>'.$row->patient_id.'</td>
+          <td>'.$row->last_name.', '.$row->given_name.' '.$row->middle_initial.'</td>
+          <td>'.$row->physician_id.'</td>
+          <td>'.$row->physician_last_name.'</td>
+          <td>'.$row->date_start.'</td>
+          <td>'.$row->status.'</td> 
+          <td>
+            <a href="../prms/case_timeline/'.$row->case_id.'"><button class="btn btn-info">View</button></a>
+            <a href="../prms/prenatal/'.$row->patient_id.'/'.$row->case_id.'"><button class="btn btn-success">Prenatal</button></a>';
+            if($row->date_start == $start_date )
+            {
+              echo ' <button class="btn btn-warning">Childbirth </button> ';
+            }
+            elseif($row->date_start < $end_date)
+            {
+              echo '<button class="btn btn-danger ">Childbirth </button>';
+            }
+            else
+            {
+              echo '<button class="btn btn-success" disabled>Childbirth </button>';
+            }
+            echo'
+          </td>     
+         </tr>';
+        } ?>
+       </table>
+    </div>
 </div>
-
+<?php
+$date = date('d-m-Y');
+$total = date('d-m-Y', strtotime('-2 week', strtotime($date)));
+echo $total;
+?>
 </body>
 </html>
-<script>
-$(document).ready(function(){
-
- function load_country_data(page)
- {
-  $.ajax({
-   url:"<?php echo base_url(); ?>Prms/pagination/"+page,
-   method:"GET",
-   dataType:"json",
-   success:function(data)
-   {
-    $('#country_table').html(data.country_table);
-    $('#pagination_link').html(data.pagination_link);
-   }
-  });
- }
- 
- load_country_data(1);
-
- $(document).on("click", ".pagination li a", function(event){
-  event.preventDefault();
-  var page = $(this).data("ci-pagination-page");
-  load_country_data(page);
- });
-
-});
-</script>
+  <script>
+    $(function () {
+      $('#case_list').DataTable()
+      $('#example2').DataTable({
+        'paging'      : true,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : true,
+        'autoWidth'   : false
+      })
+    })
+  </script>

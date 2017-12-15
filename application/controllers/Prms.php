@@ -205,47 +205,10 @@ class Prms extends CI_Controller {
   public function case_list()
   {
     $this->load->model('Prms_model');
-    $data['patient_names'] = $this->Prms_model->get_patient_names();
-    $data['physician_id'] = $this->Main_model->get_physician_id();
-    $this->load->view('prms/cases', $data);
+    //$data['case_details'] = $this->Prms_model->get_patient_names();
+    $data['case_details'] = $this->Prms_model->get_case_list();
+    $this->load->view('prms/case_list', $data);
   }
-  public function pagination()
- {
-  $this->load->model("Prms_model");
-  $this->load->library("pagination");
-  $config = array();
-  $config["base_url"] = "#";
-  $config["total_rows"] = $this->Prms_model->count_all();
-  $config["per_page"] = 5;
-  $config["uri_segment"] = 3;
-  $config["use_page_numbers"] = TRUE;
-  $config["full_tag_open"] = '<ul class="pagination">';
-  $config["full_tag_close"] = '</ul>';
-  $config["first_tag_open"] = '<li>';
-  $config["first_tag_close"] = '</li>';
-  $config["last_tag_open"] = '<li>';
-  $config["last_tag_close"] = '</li>';
-  $config['next_link'] = '&gt;';
-  $config["next_tag_open"] = '<li>';
-  $config["next_tag_close"] = '</li>';
-  $config["prev_link"] = "&lt;";
-  $config["prev_tag_open"] = "<li>";
-  $config["prev_tag_close"] = "</li>";
-  $config["cur_tag_open"] = "<li class='active'><a href='#'>";
-  $config["cur_tag_close"] = "</a></li>";
-  $config["num_tag_open"] = "<li>";
-  $config["num_tag_close"] = "</li>";
-  $config["num_links"] = 1;
-  $this->pagination->initialize($config);
-  $page = $this->uri->segment(3);
-  $start = ($page - 1) * $config["per_page"];
-
-  $output = array(
-   'pagination_link'  => $this->pagination->create_links(),
-   'country_table'   => $this->Prms_model->fetch_details($config["per_page"], $start)
-  );
-  echo json_encode($output);
- }
 
    public function pagination_patient_list()
  {
@@ -286,8 +249,10 @@ class Prms extends CI_Controller {
    }
 
     public function patient_list()
-    {
-      $this->load->view('prms/patient_list');
+    {  
+      $this->load->model('Prms_model');
+      $data['dt_li'] = $this->Prms_model->patient_list();
+      $this->load->view('prms/patient_list', $data);
     }
 
     public function patient_profile($patient_ID)
@@ -354,5 +319,11 @@ class Prms extends CI_Controller {
       $this->load->model('Prms_model');
       $data['dt_ex'] = $this->Prms_model->dt_ex();
       $this->load->view('prms/datatables', $data);
+    }
+    public function print_report()
+    {
+      $this->load->model('Prms_model');
+      $data['dt_re'] = $this->Prms_model->dt_re();
+      $this->load->view('report/v_report', $data);
     }
 }

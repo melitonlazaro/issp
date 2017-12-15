@@ -23,6 +23,11 @@ class Main_model extends CI_Model {
            }  
 	}
 
+  public function feedback($data)
+  {
+    $this->db->insert('feedback', $data);
+  }
+
   public function online_appointment($data)
   {
     $this->db->insert('online_appointment', $data);
@@ -57,12 +62,6 @@ class Main_model extends CI_Model {
     $query = $this->db->query("SELECT `last_name` FROM patient_info");
     return $query->result();
   }
-  
-  public function get_physician_id()
-  {
-    $query = $this->db->query("SELECT `physician_id` FROM physician ");
-    return $query->result();
-  }
 
   public function count_patient()
   {
@@ -84,6 +83,12 @@ class Main_model extends CI_Model {
     $this->db->from('tasks');
     $query = $this->db->get();
     return $query->result();
+  }
+
+  public function add_task($task_data)
+  {
+    $this->db->insert('tasks', $task_data);
+    return TRUE;
   }
 
 }

@@ -124,6 +124,7 @@
 
 <?php require('sidenav.php'); ?>
 <br><br><br>
+<div id="body">
   <div class="container-fluid">
     <h1 class="page-header">Dashboard</h1>
       <div class="pull-right">
@@ -338,8 +339,10 @@
               <div id="todoform">
                 <button class="btn btn-info btn-sm" id="todoformbutton"><i class="fa fa-arrow-left"></i></button>
                 <br><br>
-                <form>
-                  <input type="text" class="form-control" placeholder="Task"> 
+                <form method="POST" id="task_form">
+                  <label>Task</label>
+                  <input type="text" name="task_name" id="task_name" class="form-control"> <br>
+                  <button type="submit" class="btn btn-success">Add</button>
                 </form>
                 <br><br><br>
               </div>
@@ -348,7 +351,7 @@
         </div>
       </div>
     </div>
-
+</div>
 </body>
 </html> 
 <script src="<?php echo base_url();?>public/js/jquery.dataTables.min.js"></script>
@@ -403,4 +406,22 @@ $(document).ready(function() {
     $('#todoform').hide(100);
   });
 });
+</script>
+
+<script>
+  $(document).on('submit', '#task_form', function(event){
+    event.preventDefault();
+    var task_name = $('#task_name').val();
+    $.ajax({
+      type:"post",
+      url: "<?php echo site_url();?>/Main/add_task",
+      data: {task_name:task_name},
+      success:function(data)
+      {
+        alert("Task created");
+        $('#task_content').val('');
+        $('#todo').html(data);
+      }
+    });
+  });
 </script>
