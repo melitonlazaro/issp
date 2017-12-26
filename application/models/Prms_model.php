@@ -252,5 +252,22 @@ public function dt_re()
   return $query->result();
  }
 
+ public function infant_list()
+ {
+  $this->db->select('*');
+  $this->db->from('infant_info');
+  $this->db->join('patient_info', 'patient_info.patient_ID = infant_info.patient_ID');
+  $query = $this->db->get();
+  return $query->result();
+ }
+
+ public function infant_profile($infant_id)
+ {
+  $this->db->select('*');
+  $this->db->from('infant_info');
+  $query = $this->db->get();
+  return $query->row();
+ }
+
 }
 ?>

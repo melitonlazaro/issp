@@ -24,14 +24,7 @@ class Main extends CI_Controller {
 	 */
 	public function index()
 	{
-    if($this->session->userdata('username'))
-    {
-      $this->dashboard();
-    }
-    else
-    {
 		$this->load->view('index');
-    }
 	}
 
   public function employee_login()
@@ -60,7 +53,12 @@ class Main extends CI_Controller {
                 'company' => $this->input->post('company'),
                 'message' => $this->input->post('message'),
                );
-    $this->Main_model->feedback($data);
+    $result = $this->Main_model->feedback($data);
+    if($result)
+      {
+       $this->session->set_flashdata('feedback_result', 'Thank you for sending your feedback!');
+       $this->load->view('contact');
+      }
   }
 
 	public function login()

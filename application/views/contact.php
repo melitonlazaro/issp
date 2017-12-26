@@ -37,7 +37,14 @@
 			</form>
 		</div>
 		<div class="col-md-4">
-			
+			<?php if($this->session->flashdata('feedback_result'))
+			{
+				echo $this->session->flashdata('feedback_result');
+			}
+			else
+			{
+				
+			} ?>
 		</div>
 	</div>
 

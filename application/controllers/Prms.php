@@ -40,6 +40,7 @@ class Prms extends CI_Controller {
       $error = $this->db->error();
     }
   }
+
   public function view_id($last_case_id)
   {
     $this->load->view('prms/profiling', $last_case_id);
@@ -49,6 +50,7 @@ class Prms extends CI_Controller {
   {
     $this->load->view('prms/patient');
   }
+
   public function process_profiling()
   {
     $this->load->model('Prms_model');
@@ -210,120 +212,89 @@ class Prms extends CI_Controller {
     $this->load->view('prms/case_list', $data);
   }
 
-   public function pagination_patient_list()
- {
-    $this->load->model("Prms_model");
-    $this->load->library("pagination");
-    $config = array();
-    $config["base_url"] = "#";
-    $config["total_rows"] = $this->Prms_model->count_all_patient();
-    $config["per_page"] = 5;
-    $config["uri_segment"] = 3;
-    $config["use_page_numbers"] = TRUE;
-    $config["full_tag_open"] = '<ul class="pagination">';
-    $config["full_tag_close"] = '</ul>';
-    $config["first_tag_open"] = '<li>';
-    $config["first_tag_close"] = '</li>';
-    $config["last_tag_open"] = '<li>';
-    $config["last_tag_close"] = '</li>';
-    $config['next_link'] = '&gt;';
-    $config["next_tag_open"] = '<li>';
-    $config["next_tag_close"] = '</li>';
-    $config["prev_link"] = "&lt;";
-    $config["prev_tag_open"] = "<li>";
-    $config["prev_tag_close"] = "</li>";
-    $config["cur_tag_open"] = "<li class='active'><a href='#'>";
-    $config["cur_tag_close"] = "</a></li>";
-    $config["num_tag_open"] = "<li>";
-    $config["num_tag_close"] = "</li>";
-    $config["num_links"] = 1;
-    $this->pagination->initialize($config);
-    $page = $this->uri->segment(3);
-    $start = ($page - 1) * $config["per_page"];
+  public function patient_list()
+  {  
+    $this->load->model('Prms_model');
+    $data['dt_li'] = $this->Prms_model->patient_list();
+    $this->load->view('prms/patient_list', $data);
+  }
 
-    $output = array(
-     'pagination_link'  => $this->pagination->create_links(),
-     'country_table'   => $this->Prms_model->fetch_patient_details($config["per_page"], $start)
-    );
-    echo json_encode($output);
-   }
+  public function patient_timeline($patient_ID)
+  {
+    $this->load->model('Prms_model');
+    $data['patient_information'] = $this->Prms_model->get_patient_profile($patient_ID);
+    $data['cases'] = $this->Prms_model->get_patient_cases($patient_ID);
+    $this->load->view('prms/patient_profile', $data);
+  }
 
-    public function patient_list()
-    {  
-      $this->load->model('Prms_model');
-      $data['dt_li'] = $this->Prms_model->patient_list();
-      $this->load->view('prms/patient_list', $data);
-    }
+  public function prenatal($patient_id, $case_id)
+  {
+    $data['patient_ID'] = $patient_id;
+    $data['last_case_id']  = $case_id;
+    $this->load->view('prms/physical_examination', $data);
+  }
 
-    public function patient_profile($patient_ID)
+  public function drop_case($case_id)
+  {
+    $this->load->model('Prms_model');
+    $result = $this->Prms_model->drop_case($case_id);
+    if($result)
     {
-      $this->load->model('Prms_model');
-      $data['patient_information'] = $this->Prms_model->get_patient_profile($patient_ID);
-      $data['cases'] = $this->Prms_model->get_patient_cases($patient_ID);
-      $data['medicalhistory'] = $this->Prms_model->get_medical_history($patient_ID);
-      $data['physicalexam'] = $this->Prms_model->get_physical_examination($patient_ID);
-      $this->load->view('prms/timeline', $data);
+      $this->session->set_flashdata('delete', 'Case successfully deleted. ');
+      $this->load->view('prms/cases');
     }
+  }
 
-    public function patient_timeline($patient_ID)
-    {
-      $this->load->model('Prms_model');
-      $data['patient_information'] = $this->Prms_model->get_patient_profile($patient_ID);
-      $data['cases'] = $this->Prms_model->get_patient_cases($patient_ID);
-      $this->load->view('prms/patient_profile', $data);
-    }
+  public function case_timeline($case_id)
+  {
+    $this->load->model('Prms_model');
+    $data['prenatal'] = $this->Prms_model->get_prenatal_case_timeline($case_id);
+    $data['medicalhistory'] = $this->Prms_model->get_medical_history_case_timeline($case_id);
+    $data['case_details'] = $this->Prms_model->get_case_details($case_id);
+    $this->load->view('prms/case_timeline', $data);
+  }
 
-    public function prenatal($patient_id, $case_id)
-    {
-      $data['patient_ID'] = $patient_id;
-      $data['last_case_id']  = $case_id;
-      $this->load->view('prms/physical_examination', $data);
-    }
+  public function pe_result($Num)
+  {
+    $this->load->model('Prms_model');
+    $data['prenatal'] = $this->Prms_model->get_pe_result($Num);
+    $this->load->view('prms/Physical_examination_result', $data);
+  }
 
-    public function drop_case($case_id)
-    {
-      $this->load->model('Prms_model');
-      $result = $this->Prms_model->drop_case($case_id);
-      if($result)
-      {
-        $this->session->set_flashdata('delete', 'Case successfully deleted. ');
-        $this->load->view('prms/cases');
-      }
-    }
+  public function medicalhistory_result($Num)
+  {
+    $this->load->model('Prms_model');
+    $data['mh_result'] = $this->Prms_model->get_mh_result($Num);
+    $this->load->view('prms/medical_history_result', $data);
+  }
 
-    public function case_timeline($case_id)
-    {
-      $this->load->model('Prms_model');
-      $data['prenatal'] = $this->Prms_model->get_prenatal_case_timeline($case_id);
-      $data['medicalhistory'] = $this->Prms_model->get_medical_history_case_timeline($case_id);
-      $data['case_details'] = $this->Prms_model->get_case_details($case_id);
-      $this->load->view('prms/case_timeline', $data);
-    }
+  public function datatable_example()
+  {
+    $this->load->model('Prms_model');
+    $data['dt_ex'] = $this->Prms_model->dt_ex();
+    $this->load->view('prms/datatables', $data);
+  }
 
-    public function pe_result($Num)
-    {
-      $this->load->model('Prms_model');
-      $data['prenatal'] = $this->Prms_model->get_pe_result($Num);
-      $this->load->view('prms/Physical_examination_result', $data);
-    }
+  public function print_report()
+  {
+    $this->load->model('Prms_model');
+    $data['dt_re'] = $this->Prms_model->dt_re();
+    $this->load->view('report/v_report', $data);
+  }
 
-    public function medicalhistory_result($Num)
-    {
-      $this->load->model('Prms_model');
-      $data['mh_result'] = $this->Prms_model->get_mh_result($Num);
-      $this->load->view('prms/medical_history_result', $data);
-    }
+  public function infant_list()
+  {
+    $this->load->model('Prms_model');
+    $data['infants'] = $this->Prms_model->infant_list();
+    $this->load->view('prms/infant_list', $data);
+  }
 
-    public function datatable_example()
-    {
-      $this->load->model('Prms_model');
-      $data['dt_ex'] = $this->Prms_model->dt_ex();
-      $this->load->view('prms/datatables', $data);
-    }
-    public function print_report()
-    {
-      $this->load->model('Prms_model');
-      $data['dt_re'] = $this->Prms_model->dt_re();
-      $this->load->view('report/v_report', $data);
-    }
+  public function infant_profile($infant_id)
+  {
+    $this->load->model('Prms_model');
+    $data['infant_info'] = $this->Prms_model->infant_profile($infant_id); 
+    $this->load->view('prms/infant_profile', $data);
+  }
+
+
 }

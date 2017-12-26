@@ -25,7 +25,8 @@ class Main_model extends CI_Model {
 
   public function feedback($data)
   {
-    $this->db->insert('feedback', $data);
+    $result = $this->db->insert('feedback', $data);
+    return $result;
   }
 
   public function online_appointment($data)
@@ -41,7 +42,7 @@ class Main_model extends CI_Model {
 
   public function count_latest_infants()
   {
-    $query = $this->db->query("SELECT `infant_id` `last_name`, `first_name`, `date_of_birth` FROM `infant_info` ORDER BY `infant_id` DESC LIMIT 5");
+    $query = $this->db->query("SELECT `infant_id` `infant_last_name`, `infant_first_name`, `infant_date_of_birth` FROM `infant_info` ORDER BY `infant_id` DESC LIMIT 5");
     return $query->result();
   }
 

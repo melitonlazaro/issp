@@ -91,7 +91,7 @@
   <a href="<?php echo base_url();?>Main/dashboard"><i class="fa fa-dashboard"> </i>&nbsp Dashboard</a>
   <a href="<?php echo base_url();?>Prms/case_list" ><i class="fa fa-plus-square"> </i>&nbsp Maternity Case</a>
   <a href="<?php echo base_url();?>Prms/Patient_list"><i class="fa fa-user-o"></i>&nbsp Patients</a>
-  <a href="#"><i class="fa fa-user"></i>&nbsp Infants</a>
+  <a href="<?php echo base_url();?>Prms/Infant_list"><i class="fa fa-user"></i>&nbsp Infants</a>
   <a href="#"><i class="fa fa-file"></i>&nbsp Report</a>
   <a href="#" ><i class="fa fa-cog"></i>&nbsp Settings</a>
   <a href="<?php echo base_url();?>/Main/logout"><i class="fa fa-sign-out"></i>&nbsp Logout

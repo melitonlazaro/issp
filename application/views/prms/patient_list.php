@@ -21,7 +21,7 @@
         </ol>
       </div>
       <br><br>
-  <div class="container">
+  <div class="container-fluid">
     <table id="example1" class="table table-bordered table-striped">
       <thead>
         <tr>
@@ -30,6 +30,7 @@
           <th>Given Name</th>
           <th>MI</th>
           <th>Occupation</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -43,8 +44,9 @@
                 <td>'.$dt->given_name.'</td>
                 <td>'.$dt->middle_initial.'</td>
                 <td>'.$dt->occupation.'</td>
+                <td>'?> <a href="<?php echo base_url();?>Prms/patient_timeline/<?php echo $dt->patient_ID;?>"><button class="btn btn-primary">Profile</button></td>
               </tr>
-               ';
+          <?php
           } ?>
 
       </tbody>

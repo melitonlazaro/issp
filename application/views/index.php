@@ -53,7 +53,12 @@
 						      <li><a class="hvr-underline-from-center" href="#slide-2">About</a></li>
 						      <li><a class="hvr-underline-from-center" href="#">Contact</a></li>
 						    </ul>
-						    		    <a href="<?php echo base_url('Main/employee_login'); ?>"><button type="button" class="btn btn-outline-warning navbar-btn navbar-right">Login</button>	</a>
+						    		<?php if($this->session->userdata('username')){ ?>
+						    		    <a href="<?php echo base_url('Main/dashboard'); ?>"><button type="button" class="btn btn-outline-warning navbar-btn navbar-right">Admin</button></a>
+						    		<?php }
+						    			else{ ?>
+							    			<a href="<?php echo base_url('Main/employee_login'); ?>"><button type="button" class="btn btn-outline-warning navbar-btn navbar-right">Login</button></a>
+						    		<?php } ?>
 						  </div>
 						</nav>
 						<div class="panel"></div>
