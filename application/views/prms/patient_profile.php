@@ -1,28 +1,58 @@
 <?php 
     $server = "localhost";
     $username = "root";
-    $password = "";
+    $password= "";
     $db = "mcms";
 
-    $conn =  new mysqli($server, $username, $password, $db);
+    $conn = new mysqli($server, $username, $password, $db);
     if($conn->connect_error)
     {
-        die("Connecting to database failed:" . $conn->connect->error);
+        echo "Connecting to database failed. ";
     }
-    $query = "SELECT `height`, `date` FROM `physicalexamination` WHERE `patient_ID` = $patient_information->patient_ID ORDER BY `date` ASC";
+    $query = "SELECT `date`, `weight` FROM `physicalexamination` WHERE `patient_ID` = $patient_information->patient_ID ORDER BY `date` ASC";
     $result = $conn->query($query);
     $chart_data = '';
     while($row = $result->fetch_array())
     {
-        $chart_data .= "{ date:'".$row["date"]."', height:".$row["height"]."}, ";
+        $chart_data .= "{ date:'".$row["date"]."', weight:".$row["weight"]."}, "; //Error was caused by a missing "space" between Comma and Parenthesis 
+
     }
         $chart_data = substr($chart_data, 0, -2);
 ?>
-
+<?php 
+    if($conn->connect_error)
+    {
+        echo "Connecting to database failed.";
+    }
+    $query1 = "SELECT `date`, `height` FROM `physicalexamination` WHERE `patient_ID` = $patient_information->patient_ID ORDER BY `date` ASC";
+    $result = $conn->query($query1);
+    $chart_data1 = '';
+    while($row = $result->fetch_array())
+    {
+        $chart_data1 .= "{ date:'".$row["date"]."', height:".$row["height"]."}, ";
+    }
+        $chart_data1 = substr($chart_data1, 0, -2);
+?>
+<?php 
+    if($conn->connect_error)
+    {
+        echo "Connecting to database failed.";
+    }
+    $query2 = "SELECT `date`, `systolic`, `diastolic` FROM `physicalexamination` WHERE `patient_ID` = $patient_information->patient_ID ORDER BY `date` ASC";
+    $result = $conn->query($query2);
+    $chart_data2 = '';
+    while($row = $result->fetch_array())
+    {
+      $chart_data2 .= "{ date:'".$row["date"]."', systolic:".$row["systolic"].", diastolic:".$row["diastolic"]."}, ";  
+    }
+      $chart_data2 = substr($chart_data2, 0, -2);
+?>
+<!DOCTYPE html>
 <html>
 <head>
 	<?php require('extensions.php'); ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>/Public/css/AdminLTE.css">
+
 </head>
 <body>
 	<?php require('sidenav.php'); ?>
@@ -137,13 +167,13 @@
     						</div>
     						<div class="col-md-9">
     							<div id="weight">
-    								<div id="weight_chart">weight</div>
+    								<div id="weight_chart"></div>
     							</div>
     							<div id="height">
     								<div id="height_chart"></div>
     							</div>
     							<div id="blood_pressure">
-    								<div id="weight_chart">bp</div>
+    								<div id="blood_pressure_chart"></div>
     							</div>
     						</div>
     					</div>
@@ -224,12 +254,38 @@
 </script>
 <script>
 Morris.Line({
- element : 'height_chart',
+ element : 'weight_chart',
  data:[<?php echo $chart_data; ?>],
  xkey:'date',
- ykeys:['height'],
- labels:['height'],
+ ykeys:['weight'],
+ labels:['weight'],
  hideHover:'auto',
  stacked:true
 });
+</script>
+<script>
+    Morris.Line({
+        element: 'height_chart',
+        data: [<?php echo $chart_data1; ?>],
+        xkey:'date',
+        ykeys:['height'],
+        labels:['height'],
+        hideHover:'auto',
+        stacked: true,
+        smooth: true,
+        lineColors: ['green'],
+        pointFillColors: ['#000000']
+    });
+</script>
+<script>
+    Morris.Area({
+        element: 'blood_pressure_chart',
+        data: [<?php echo $chart_data2; ?>],
+        xkey: 'date',
+        ykeys: ['systolic', 'diastolic'],
+        labels: ['systolic', 'diastolic'],
+        hideHover: 'auto',
+        stacked: true,
+        lineColors:['gray','red']
+    });
 </script>
