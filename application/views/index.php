@@ -102,7 +102,7 @@
 					      <div class="col-md-6"><img src="<?php echo base_url();?>/Public/website_extensions/img/cal.png"></div>
   						  <div class="col-md-6"><p class="letit"> Appointment Scheduling for Free</p><br>
   						  	<p style="font-weight: bold;">Client Reminders, Easier and just one click away!</p>
-  						  <a href="form.html" type="button" class="btn btn-lg btn-outline-info">Book Now</a>	
+  						  <a href="<?php echo base_url();?>Main/Book_appointment" type="button" class="btn btn-lg btn-outline-info">Book Now</a>	
 					  	  </div>
 		        	  </div>  	
 			   		</div>

@@ -150,7 +150,6 @@ class Main extends CI_Controller {
       $data['latest_patients'] = $this->Main_model->count_latest_patients();
       $data['latest_infants'] = $this->Main_model->count_latest_infants();
       $data['active_cases'] = $this->Main_model->count_active_cases();
-      $data['less_ten'] = $this->Item_model->less_than_ten();
       $data['tasks'] = $this->Main_model->get_tasks();
       $this->load->view('dashboard', $data);
     }
@@ -166,5 +165,156 @@ class Main extends CI_Controller {
                    );
       $result = $this->Main_model->add_task($data); 
     }
+    public function Book_appointment()
+    {
+      $this->load->view('form');
+    }
+
+    public function full_calendar()
+    {
+      $this->load->view('full_calendar_example');
+    }
+
+    public function get_events()
+    {
+      $start = $this->input->get("start");
+      $end = $this->input->get("end");
+
+      $startdt = new DateTime('now'); //local time
+      $startdt->setTimestamp($start); //setting the date based on timestamp
+      $start_format = $startdt->format('Y-m-d H:i:s');
+
+      $enddt = new DateTime('now');
+      $enddt->setTimestamp($end);
+      $end_format = $enddt->format('Y-m-d H:i:s');
+
+      $events = $this->Main_model->get_events($start_format, $end_format);
+
+      $data_events = array();
+
+      foreach($events->result() as $r){
+        $data_events[] = array(
+          "id" => $r->ID,
+          "title" => $r->title,
+          "description" => $r->description,
+          "end" => $r->end,
+          "start" => $r->start 
+        );
+      }
+      echo json_encode(array("events" => $data_events));
+      exit();
+    }
+
+    public function add_event()
+    {
+      $name = $this->input->post("name", TRUE);
+      $desc = $this->input->post("description", TRUE);
+      $start_date = $this->input->post("start_date", TRUE);
+      $end_date = $this->input->post("end_date", TRUE);
+
+      // if(!empty($start_date))
+      // {
+      //   $sd = DateTime::createFromFormat("Y/m/d H:i", $start_date);
+      //   $start_date = $sd->format('Y-m-d H:i:s');
+      //   $start_date_timestamp = $sd->getTimestamp();
+      // }
+      // else
+      // {
+      //   $start_date = date("Y-m-d H:i:s", time());
+      //   $start_date_timestamp = time();
+      // }
+
+      // if(!empty($end_date))
+      // {
+      //   $ed = DateTime::createFromFormat("Y/m/d H:i", $end_date);
+      //   $end_date = $ed->format('Y-m-d H:i:s');
+      //   $end_date_timestamp = $ed->getTimestamp();
+      // }
+      // else
+      // {
+      //   $end_date = date("Y-m-d H:i:s", time());
+      //   $end_date_timestamp = time();
+      // }
+
+      $insert_event_result = $this->Main_model->add_event(array(
+          "ID" => NULL,
+          "title" =>$name,
+          "description" => $desc,
+          "start" => $start_date,
+          "end" => $end_date
+        )
+      );
+      if($insert_event_result)
+      {
+        $this->session->set_flashdata('event_success', "A new Calendar Event was added");
+        redirect(site_url("Main/full_calendar"));
+      }
+      else
+      {
+        $this->session->set_flashdata('event_failed', "An error on inserting Calendar Event");
+        redirect(site_url("Main/full_calendar"));
+      }
+    }
+
+    public function edit_event()
+    {
+      $eventid = intval($this->input->post("eventid"));
+      $event = $this->Main_model->get_event($eventid);
+      if($event->num_rows() == 0)
+      {
+        echo "Invalid event";
+        exit();
+      }
+      $event->row();
+
+      $name = $this->input->post("name");
+      $desc = $this->input->post("description");
+      $start_date = $this->input->post("start_date");
+      $end_date = $this->input->post("end_date");
+      $delete = intval($this->input->post("delete"));
+
+      if(isset($_POST["delete_button"]))
+      {
+        $id = $this->input->post("eventid");
+        $this->Main_model->delete_event($id);
+        redirect(site_url('Main/full_calendar'));
+      }
+      else
+      {
+        if(!empty($start_date))
+        {
+          $sd = DateTime::createFromFormat("Y/m/d H:i", $start_date);
+          $start_date = $sd->format('Y-m-d H:i:s');
+          $start_date_timestamp = $sd->getTimestamp();
+        }
+        else
+        {
+          $start_date = date("Y-m-d H:i:s", time());
+          $start_date_timestamp = time();
+        }
+        if(!empty($end_date))
+        {
+          $ed = DateTime::createFromFormat("Y/m/d H:i", $end_date);
+          $end_date = $ed->format('Y-m-d H:i:s');
+          $end_date_timestamp = $ed->getTimestamp();
+        }
+        else
+        {
+          $end_date = date("Y-m-d H:i:s", time());
+          $end_date_timestamp = time();
+        }
+
+        $data = array(
+                    "title" => $name,
+                    "description" => $desc,
+                    "start" => $start_date,
+                    "end" => $end_date,
+                     );
+
+        $this->Main_model->update_event($eventid, $data);
+        redirect(site_url("main/full_calendar"));
+      } 
+    }
+
 }
 ?>

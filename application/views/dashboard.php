@@ -257,36 +257,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h4>Clinic Items</h4>
-                </div>
-                <div class="panel-body">
-                  <table class="table table-responsive table-hover table-bordered">
-                      <tr id="tablehead">
-                          <th>Item Name</th>
-                          <th>Item Type</th>
-                          <th>Quantity Delivered</th>
-                          <th>Date Updated</th>
-                      </tr>
-                  <?php foreach($less_ten as $lt)
-                  {
-                      echo '
-                          <tr>
-                          <td>'.$lt->item_name.'</td>
-                          <td>'.$lt->item_type.'</td>
-                          <td>'.$lt->item_quantity.'</td>
-                          <td>'.$lt->item_quantity_updated.'</td>
-                          </tr>
-                           ';
-                  } 
-                  ?>
-                  </table>  
-                  <div class="pull-right">                   
-                    <a href="../Inventory"><button type="submit" class="btn btn-info" name="update">View All</button></a>
-                  </div>
-                </div>
-              </div>
+             
             </div>
           </div>
    </div>

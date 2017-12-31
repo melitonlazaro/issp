@@ -8,13 +8,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/main.css">
-        <script src="js/vendor/modernizr-2.7.1.min.js"></script>
-      <link rel="shortcut icon" type="../image/png" href="img/icon.png"/>
-      <link rel="stylesheet" href="css/style.css">
-      <link rel="stylesheet" href="css/bootstrap.css">  
-      <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="<?php echo base_url();?>/Public/website_extensions/css/normalize.css">
+        <link rel="stylesheet" href="<?php echo base_url();?>/Public/website_extensions/css/main.css">
+        <script src="<?php echo base_url();?>/Public/website_extensions/js/vendor/modernizr-2.7.1.min.js"></script>
+      <link rel="shortcut icon" type="../image/png" href="<?php echo base_url();?>/Public/website_extensions/img/icon.png"/>
+      <link rel="stylesheet" href="<?php echo base_url();?>/Public/website_extensions/css/style.css">
+      <link rel="stylesheet" href="<?php echo base_url();?>/Public/website_extensions/css/bootstrap.css">  
+      <link rel="stylesheet" href="<?php echo base_url();?>/Public/website_extensions/font-awesome/css/font-awesome.min.css">
       <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
 
     </head>
