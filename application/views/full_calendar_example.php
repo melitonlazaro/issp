@@ -150,12 +150,32 @@
 						}
 					}	
 				],
+
+
 			dayClick: function(date, jsEvent, view)
 			{
 				date_last_clicked = $(this);
 				$(this).css('background-color', '#ffffff');
 				$('#addModal').modal();
 			},
+			// dayClick: function(date, allDay, jsEvent, view) {
+			//    var myDate = new Date();
+
+			//    //How many days to add from today?
+			//    var daysToAdd = 15;
+
+			//    myDate.setDate(myDate.getDate() + daysToAdd);
+
+			//    if (date < myDate) {
+			//        //TRUE Clicked date smaller than today + daysToadd
+			//        alert("You cannot book on this day!");
+			//    } else {
+			//        //FLASE Clicked date larger than today + daysToadd
+			//        alert("Excellent choice! We can book today..");
+			//    }
+
+			// },
+
 			eventClick: function(event, jsEvent, view)
 			{
 				$("#event_id").val(event.id);

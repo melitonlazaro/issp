@@ -17,24 +17,50 @@ body
 	<?php require('sidenav.php');  ?>
 	<br><br><br>
     <div class="container-fluid">
-        <h1 class="page-header">Case Profile</h1>
+        <h1 class="page-header">Maternity Case Profile</h1>
            <div class="pull-right">
                 <ol class="breadcrumb">
                   <li >
                     <i class="fa fa-dashboard"></i> Dashboard
                   </li>
                   <li>
-                    <i class="fa fa-plus-square"> Case List</i>
+                    <i class="fa fa-plus-square">Maternity Case List</i>
                   </li>
                   <li class="active">
-                    <i class="fa fa-list"> Case Profile</i>
+                    <i class="fa fa-list">Maternity Case Profile</i>
                   </li>
                 </ol>
             </div>
             <br><br>
-     
+            <div class="panel panel-info">
+                <?php foreach ($case_details as $cs): ?>
+                <div class="panel-heading">
+                    <div class="row">
+                        Maternity Case Details
+                        <div class="pull-right">
+                            <?php  echo $cs->case_id;?>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            
+                        </div>
+                        <div class="col-md-3">
+                            
+                        </div>
+                        <div class="col-md-3">
+                            
+                        </div>
+                        <div class="col-md-3">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="jumbotron" id="case_details">
-                <?php foreach ($case_details as $cs):
+                <?php 
                     echo '
                         <div class="row">
                             <p>Case Details </p>
@@ -138,13 +164,15 @@ body
                                                 <div class="col-lg-2">
                                                     <h5></h5>
                                                     <i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbspBlood Type: <br>
-                                                     <i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbspBlood Pressure:<br>
+                                                     <i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbspSystolic:<br>
+                                                     <i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbspDiastolic:<br>
                                                      <i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbspHeight:<br>
                                                      <i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbspWeight:<br>
                                                 </div>
                                                 <div class="col-lg-1">
                                                                 '.$pr->blood_type.' <br>
-                                                                '.$pr->blood_pressure.' <br>
+                                                                '.$pr->systolic.' <br>
+                                                                '.$pr->diastolic.' <br>
                                                                 '.$pr->height.' <br>
                                                                 '.$pr->weight.' <br>
                                                 </div>

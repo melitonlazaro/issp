@@ -64,7 +64,7 @@
 						<div class="panel"></div>
 					<div class="jumbotron text-center pad-t">
 					  <h1 style="font-weight: bold;, font-family: Bebas Neue, Arial;">Jewel's Maternity Lying-in and Medical Clinic</h1>
-					  <p class="lead"><i>"The grand adventure is about to begin"</i></p>
+					  <!-- <p class="lead"><i>"The grand adventure is about to begin"</i></p> -->
 					</div>
 				</div>
 		        	</div>
@@ -122,7 +122,7 @@
 			  			<h4>About Us</h4>
 			  		</div>
 			  		<div class="col-md-4">
-			  			Logos
+			  			
 			  		</div>
 			  </div>
 			  

@@ -101,6 +101,11 @@ class Main extends CI_Controller {
     	redirect('Main');
     }	
 
+    public function Book_appointment()
+    {
+      $this->load->view('Form');
+    }
+
     public function online_appointment()
     {
         $data = array(
@@ -119,20 +124,12 @@ class Main extends CI_Controller {
           $number = $this->input->post('contact_number');
           
           $number_code = mt_rand(10000, 99999);
-          $deviceID = 56400;
+          $deviceID = 70979;
           $number = $number;
           $message = $number_code;
 
           $result = $smsGateway->sendMessageToNumber($number, $message, $deviceID); 
 
-          if($result)
-          {
-            $confirmation_code = $this->input->post('confirmation_code_user');
-            if($confirmation_code === $number_code)
-            {
-               $add_appointment = $this->Main_model->online_appointment($data);
-            }
-          }
     }
 
     public function send_confirmation_code($num)
@@ -164,10 +161,6 @@ class Main extends CI_Controller {
                     'time' => date('H:i')
                    );
       $result = $this->Main_model->add_task($data); 
-    }
-    public function Book_appointment()
-    {
-      $this->load->view('form');
     }
 
     public function full_calendar()
@@ -212,29 +205,29 @@ class Main extends CI_Controller {
       $start_date = $this->input->post("start_date", TRUE);
       $end_date = $this->input->post("end_date", TRUE);
 
-      // if(!empty($start_date))
-      // {
-      //   $sd = DateTime::createFromFormat("Y/m/d H:i", $start_date);
-      //   $start_date = $sd->format('Y-m-d H:i:s');
-      //   $start_date_timestamp = $sd->getTimestamp();
-      // }
-      // else
-      // {
-      //   $start_date = date("Y-m-d H:i:s", time());
-      //   $start_date_timestamp = time();
-      // }
+      if(!empty($start_date))
+      {
+        $sd = DateTime::createFromFormat("Y/m/d H:i", $start_date);
+        $start_date = $sd->format('Y-m-d H:i:s');
+        $start_date_timestamp = $sd->getTimestamp();
+      }
+      else
+      {
+        $start_date = date("Y-m-d H:i:s", time());
+        $start_date_timestamp = time();
+      }
 
-      // if(!empty($end_date))
-      // {
-      //   $ed = DateTime::createFromFormat("Y/m/d H:i", $end_date);
-      //   $end_date = $ed->format('Y-m-d H:i:s');
-      //   $end_date_timestamp = $ed->getTimestamp();
-      // }
-      // else
-      // {
-      //   $end_date = date("Y-m-d H:i:s", time());
-      //   $end_date_timestamp = time();
-      // }
+      if(!empty($end_date))
+      {
+        $ed = DateTime::createFromFormat("Y/m/d H:i", $end_date);
+        $end_date = $ed->format('Y-m-d H:i:s');
+        $end_date_timestamp = $ed->getTimestamp();
+      }
+      else
+      {
+        $end_date = date("Y-m-d H:i:s", time());
+        $end_date_timestamp = time();
+      }
 
       $insert_event_result = $this->Main_model->add_event(array(
           "ID" => NULL,
@@ -247,12 +240,12 @@ class Main extends CI_Controller {
       if($insert_event_result)
       {
         $this->session->set_flashdata('event_success', "A new Calendar Event was added");
-        redirect(site_url("Main/full_calendar"));
+        redirect(site_url("Main/dashboard"));
       }
       else
       {
         $this->session->set_flashdata('event_failed', "An error on inserting Calendar Event");
-        redirect(site_url("Main/full_calendar"));
+        redirect(site_url("Main/dashboard"));
       }
     }
 
@@ -277,7 +270,7 @@ class Main extends CI_Controller {
       {
         $id = $this->input->post("eventid");
         $this->Main_model->delete_event($id);
-        redirect(site_url('Main/full_calendar'));
+        redirect(site_url('Main/dashboard'));
       }
       else
       {
@@ -312,7 +305,7 @@ class Main extends CI_Controller {
                      );
 
         $this->Main_model->update_event($eventid, $data);
-        redirect(site_url("main/full_calendar"));
+        redirect(site_url("main/dashboard"));
       } 
     }
 

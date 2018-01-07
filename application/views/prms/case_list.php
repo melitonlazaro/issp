@@ -139,9 +139,14 @@
   <script src="<?php echo base_url();?>public/js/dataTables.bootstrap.min.js"></script>
   <script>
     $(function () {
-      $('#example1').DataTable()
-     
-    })
+      $('#example1').DataTable({
+        buttons:[
+        {
+          text:'My Button'
+
+        }]
+      });
+    });
   </script>
 </body>
 </html>
