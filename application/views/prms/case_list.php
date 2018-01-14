@@ -79,6 +79,10 @@
   
 
 	<div class="container">
+    <div class="pull-right">
+      <a href="<?php echo base_url(); ?>Prms/profiling"><button class="btn btn-info">Create Maternity Case</button></a>
+    </div>
+    <br><br><br>
 		<table id="example1" class="table table-bordered table-striped">
 			<thead>
 				<tr>
@@ -96,7 +100,7 @@
 					<?php
 					$date = date('d-m-Y');
 					$total = date('d-m-Y', strtotime('-2 week', strtotime($date)));
-					echo $total;
+					// echo $total;
 					?>
 					<?php foreach ($case_details as $cd) 
 					{

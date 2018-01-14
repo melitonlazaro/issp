@@ -237,7 +237,6 @@
                       <tr id="tablehead">
                           <th>Case ID</th>
                           <th>Patient ID</th>
-                          <th>Physician ID</th>
                           <th>Start date</th>
                       </tr>
                   <?php foreach($active_cases as $ac)
@@ -245,8 +244,7 @@
                       echo '
                           <tr>
                           <td>'.$ac->case_id.'</td>
-                          <td>'.$ac->patient_id.'</td>
-                          <td>'.$ac->physician_id.'</td>
+                          <td>'.$ac->patient_ID.'</td>
                           <td>'.$ac->date_start.'</td>
                           </tr>
                            ';

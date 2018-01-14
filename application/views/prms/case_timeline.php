@@ -1,3 +1,38 @@
+<?php 
+    $server = "localhost";
+    $username = "root";
+    $password = "";
+    $db = "mcms";
+
+    $conn = new mysqli($server, $username, $password, $db);
+    if($conn->connect_error)
+    {
+        die("Connecting to database failed.");
+    }
+
+    $query = "SELECT `date`, `weight` FROM `physicalexamination` WHERE `case_id` = $case_id ORDER BY `date` ASC";
+    $result = $conn->query($query);
+    $chart_data = '';
+    while($row = $result->fetch_array())
+    {
+        $chart_data .= "{ date:'".$row["date"]."', weight:".$row["weight"]."}, ";
+    }
+        $chart_data = substr($chart_data, 0, -2);
+?>
+<?php 
+    if($conn->connect_error)
+    {
+        die("Connecting to database failed.");
+    }
+    $query1 = "SELECT `date`, `height` FROM `physicalexamination` WHERE `case_id` = $case_id ORDER BY `date` ASC";
+    $result = $conn->query($query1);
+    $chart_data1 = '';
+    while($row = $result->fetch_array())
+    {
+        $chart_data1 .= "{ date:'".$row["date"]."', height:".$row["height"]." }, ";
+    }
+        $chart_data1 = substr($chart_data1, 0, -2);
+?>
 <html>
 <head>
 	<?php require('extensions.php') ?>
@@ -8,6 +43,10 @@ body
     background-color: #ecf0f5;
 }
 #case_details
+{
+    background-color: white;
+}
+#card
 {
     background-color: white;
 }
@@ -32,31 +71,78 @@ body
                 </ol>
             </div>
             <br><br>
-            <div class="panel panel-info">
-                <?php foreach ($case_details as $cs): ?>
-                <div class="panel-heading">
-                    <div class="row">
-                        Maternity Case Details
-                        <div class="pull-right">
-                            <?php  echo $cs->case_id;?>
+            <div class="row">
+                <div class="col-md-5">
+                    <br>
+                    <div class="panel panel-info">
+                        <?php foreach ($case_details as $cs): ?>
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    Maternity Case Details
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="pull-right">
+                                        <?php  echo $cs->case_id;?>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped table-condensed">
+                                <tr>
+                                    <td>Maternity Case Number</td>
+                                    <td><?php echo $cs->case_id;?></td>
+                                </tr>
+                                <tr>
+                                    <td>Date Started</td>
+                                    <td><?php echo $cs->date_start; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Patient Name</td>
+                                    <td><?php echo $cs->last_name; ?>, <?php echo $cs->given_name; ?> <?php echo $cs->middle_initial; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Contact Number</td>
+                                    <td><?php echo $cs->contact_num; ?> </td>
+                                </tr>
+                                <tr>
+                                    <td>Occupation</td>
+                                    <td><?php echo $cs->occupation; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Address</td>
+                                    <td><?php echo $cs->street_no; ?> <?php echo $cs->brgy; ?> <?php echo $cs->city;?></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            
+                <div class="col-md-5">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <p>Growth Chart</p>
                         </div>
-                        <div class="col-md-3">
-                            
-                        </div>
-                        <div class="col-md-3">
-                            
-                        </div>
-                        <div class="col-md-3">
-                            
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="btn-group-vertical">
+                                        <button id="weight_btn" class="btn btn-info">Weight</button>
+                                        <!-- <br>
+                                        <br> -->
+                                        <button id="height_btn" class="btn btn-info">Height&nbsp;</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div id="weight_chart"></div>
+                                    <div id="height_chart"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-2">
+                    
                 </div>
             </div>
             <div class="jumbotron" id="case_details">
@@ -423,5 +509,40 @@ body
             ?>
             </ul>
     </div>
+    <script>
+        $(document).ready(function(){
+            $('#height_chart').hide();
+            $('#height_btn').click(function(){
+                $('#weight_chart').hide(100);
+                $('#height_chart').show(100);
+            });
+            $('#weight_btn').click(function(){
+                $('#weight_chart').show(100);
+                $('#height_chart').hide(100);
+            });
+        });
+    </script>
+    <script>
+        Morris.Line({
+            element: 'weight_chart',
+            data: [<?php echo $chart_data; ?>],
+            xkey: 'date',
+            ykeys: ['weight'],
+            labels: ['weight'],
+            hideHover: 'auto',
+            stacked: true
+        });
+    </script>
+    <script>
+        Morris.Line({
+            element: 'height_chart',
+            data: [<?php echo $chart_data1; ?>],
+            xkey: 'date',
+            ykeys: ['height'],
+            labels: ['height'],
+            hideHover: 'auto',
+            stacked: true
+        });
+    </script>
 </body>
 </html>

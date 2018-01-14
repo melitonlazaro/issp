@@ -48,7 +48,7 @@ class Prms extends CI_Controller {
 
 	public function profiling()
   {
-    $this->load->view('prms/patient');
+    $this->load->view('prms/profiling');
   }
 
   public function process_profiling()
@@ -56,28 +56,27 @@ class Prms extends CI_Controller {
     $this->load->model('Prms_model');
     $data = array(
                   'patient_ID'  => NULL,
-                  'last_name'   => $this->input->post('surname'),
+                  'last_name'   => $this->input->post('last_name'),
                   'given_name'   => $this->input->post('given_name'),
                   'middle_initial'   => $this->input->post('middle_initial'),
                   'occupation'   => $this->input->post('occupation'),
                   'date_of_birth'   => $this->input->post('date_of_birth'),
                   'contact_num'   => $this->input->post('contact_num'),
                   'street_no'   => $this->input->post('street_no'),
-                  'brgy'   => $this->input->post('barangay'),
+                  'brgy'   => $this->input->post('brgy'),
                   'city'   => $this->input->post('city'),
-                  'emergency_contact_name'   => $this->input->post('emergency_contact'),
-                  'emergency_contact_num'   => $this->input->post('emergency_num'),
+                  'emergency_contact_name'   => $this->input->post('emergency_contact_name'),
+                  'emergency_contact_num'   => $this->input->post('emergency_contact_num'),
                   'emergency_contact_address'   => $this->input->post('emergency_contact_address'),
                   'date_registered' => date('Y-m-d')
                  );
 
     $profiling = $this->Prms_model->profiling($data);
-    $physician = 1;
     $patient_ID = $profiling;
-    $last_case_id = $this->Prms_model->create_new_case($patient_ID, $physician);
+    $last_case_id = $this->Prms_model->create_new_case($patient_ID);
     $data['patient_ID'] = $patient_ID;
     $data['last_case_id'] = $last_case_id;
-    $this->load->view('prms/medical_history', $data);
+    
   }
 
   public function medical_history()
@@ -247,10 +246,12 @@ class Prms extends CI_Controller {
 
   public function case_timeline($case_id)
   {
+
     $this->load->model('Prms_model');
     $data['prenatal'] = $this->Prms_model->get_prenatal_case_timeline($case_id);
     $data['medicalhistory'] = $this->Prms_model->get_medical_history_case_timeline($case_id);
     $data['case_details'] = $this->Prms_model->get_case_details($case_id);
+    $data['case_id'] = $case_id;
     $this->load->view('prms/case_timeline', $data);
   }
 
@@ -296,5 +297,37 @@ class Prms extends CI_Controller {
     $this->load->view('prms/infant_profile', $data);
   }
 
+  public function live_seach()
+  {
+    $this->load->view('Prms/live_search_demo');
+  }
+
+  public function ajaxsearch()
+  {
+
+    // if(is_null($this->input->get('id')))
+    // {
+
+    // }
+    // else
+    // {
+
+    //   $this->load->model('Prms_model');
+    //   $data['patient_info']=$this->Prms_model->get_patient_info($this->input->get('id')); 
+    //   $this->load->view('output', $data);
+    // }
+    $this->load->model('Prms_model');
+    $keyword=$this->input->post('keyword');
+        $data=$this->Prms_model->GetRow($keyword);        
+        echo json_encode($data);
+  }
+
+  public function get_existing_patient_information()
+  {
+    $this->load->model('Prms_model');
+    $p_info = $this->input->post('search');
+    $data = $this->Prms_model->get_row($p_info);
+    echo json_encode($data);
+  }
 
 }

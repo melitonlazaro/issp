@@ -39,7 +39,7 @@ class Main extends CI_Controller {
 
   public function contact_us()
   {
-    $this->load->view('contact');
+    $this->load->view('contact_us');
   }
 
   public function feedback()

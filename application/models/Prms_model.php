@@ -61,12 +61,11 @@ class Prms_model extends CI_Model {
     return $result->row('patient_ID');
   }
 
-  public function create_new_case($patient_ID, $physician)
+  public function create_new_case($patient_ID)
   {
     $data = array(
                   'case_id' => NULL,
                   'patient_ID' => $patient_ID,
-                  'physician_id' => $physician,
                   'date_start' => date('Y-m-d'),
                   'date_completed' => '',
                   'status' => 'Active'
@@ -231,7 +230,6 @@ class Prms_model extends CI_Model {
   $this->db->select('*');
   $this->db->from('case');
   $this->db->join('patient_info', 'patient_info.patient_ID = case.patient_ID');
-  $this->db->join('physician', 'physician.physician_id = case.physician_id');
   $query = $this->db->get();
   $case_result = $query->result();
   return $case_result;
@@ -269,5 +267,39 @@ public function dt_re()
   return $query->row();
  }
 
+ public function get_patient_info($search)
+ {
+
+        $query = $this
+                ->db
+                ->select('*')
+                ->like('last_name',$search)
+                ->or_like('given_name',$search)
+                ->get('patient_info', 1);
+     
+        if($query->num_rows()>0)
+        {
+            return $query->result(); 
+        }
+        else
+        {
+            return null;
+        }
+    
+  } 
+  public function GetRow($keyword) 
+  {        
+    $this->db->select('*');
+    $this->db->order_by('patient_ID', 'DESC');
+    $this->db->like("last_name", $keyword);
+    return $this->db->get('patient_info')->result_array();
+  }
+
+  public function get_row($p_info)
+  {
+    $this->db->select('*');
+    $this->db->where("last_name", $p_info);
+    return $this->db->get('patient_info')->result();
+  }
 }
 ?>
